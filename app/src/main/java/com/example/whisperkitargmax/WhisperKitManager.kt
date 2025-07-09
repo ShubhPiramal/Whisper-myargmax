@@ -1,6 +1,7 @@
 package com.example.whisperkitargmax
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +26,7 @@ class WhisperKitManager(
                 onStatusUpdate("Initializing WhisperKit...")
                 
                 whisperKit = WhisperKit.Builder()
-                    .setModel(WhisperKit.OPENAI_TINY_EN)
+                    .setModel(WhisperKit.Builder.OPENAI_TINY_EN)
                     .setApplicationContext(context.applicationContext)
                     .setCallback { what, result ->
                         when (what) {
@@ -34,6 +35,7 @@ class WhisperKitManager(
                                 isInitialized = true
                             }
                             WhisperKit.TextOutputCallback.MSG_TEXT_OUT -> {
+                                Log.d("ABC", "Received new text: " + result.text)
                                 val fullText = result.text
                                 onTranscriptionUpdate(fullText)
                             }
@@ -59,7 +61,7 @@ class WhisperKitManager(
             withContext(Dispatchers.IO) {
                 whisperKit?.loadModel()?.collect { progress ->
                     withContext(Dispatchers.Main) {
-                        onStatusUpdate("Loading model: ${(progress * 100).toInt()}%")
+                        onStatusUpdate("Loading model: ${(progress.fractionCompleted * 100).toInt()}%")
                     }
                 }
             }
@@ -82,6 +84,7 @@ class WhisperKitManager(
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                Log.d("ABC", "Sending audio data...");
                 whisperKit?.transcribe(audioData)
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {

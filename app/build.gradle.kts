@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.whisperkitargmax"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -59,8 +59,10 @@ dependencies {
     implementation("com.argmaxinc:whisperkit:0.3.2")
 
     // 2. QNN dependencies for hardware acceleration
-    implementation("com.qualcomm.qnn:qnn-runtime:2.34.0")
-    implementation("com.qualcomm.qnn:qnn-litert-delegate:2.34.0")
+    implementation("com.qualcomm.qti:qnn-runtime:2.34.0")
+    implementation("com.qualcomm.qti:qnn-litert-delegate:2.34.0")
+
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
 
 
     testImplementation(libs.junit)
